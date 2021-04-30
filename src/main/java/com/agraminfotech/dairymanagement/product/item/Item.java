@@ -2,6 +2,7 @@ package com.agraminfotech.dairymanagement.product.item;
 
 import com.agraminfotech.dairymanagement.base.Model;
 import com.agraminfotech.dairymanagement.product.attribute.Attribute;
+import com.agraminfotech.dairymanagement.product.brand.Brand;
 import com.agraminfotech.dairymanagement.product.category.Category;
 import com.agraminfotech.dairymanagement.product.measurement.Measurement;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -19,26 +20,17 @@ import java.util.List;
 @Setter
 public class Item extends Model {
 
-    @Column(unique = true)
+    @Column
     private String code;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column
     private String imageUrl;
 
+    @Column
     private BigDecimal purchasePrice;
-
-    private BigDecimal sellingPrice;
-
-    @ManyToOne
-    private Measurement measurement;
-
-    @ManyToOne
-    private Category productCategory;
-
-    @OneToMany(targetEntity = Attribute.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id", referencedColumnName = "id")
-    private List<Attribute> productAttributes = new ArrayList<>();
 
     @Column(length = 5000)
     private String description;
@@ -51,4 +43,20 @@ public class Item extends Model {
 
     @Column(columnDefinition = "boolean default 0")
     private boolean deletedStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "measurement_id")
+    private Measurement measurement;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id")
+    private Category productCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @OneToMany(targetEntity = Attribute.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    private List<Attribute> productAttributes = new ArrayList<>();
 }

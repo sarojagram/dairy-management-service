@@ -17,6 +17,9 @@ public class Attribute extends Model {
     @Column(unique = true)
     private String name;
 
+    @Column
+    private String value;
+
     @Column(length = 500)
     private String remarks;
 
