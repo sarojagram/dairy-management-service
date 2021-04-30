@@ -17,5 +17,4 @@ public class Helper {
         return  securityService.getCurrentUser();
     }
 
-
 }
