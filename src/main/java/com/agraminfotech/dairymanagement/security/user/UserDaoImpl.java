@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public List<ApiDTO> findAllBasic() {
-        String queryString = "SELECT id AS id,name AS name FROM user WHERE enabled=true";
+        String queryString = "SELECT id,first_name AS name FROM user WHERE enabled=true";
 
         Session session = entityManager.unwrap(Session.class).getSession();
         Query query = session.createSQLQuery(queryString);
@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public List<UserDTO> findAllUserDetails() {
-        String queryString = "SELECT id AS id,name AS name FROM user WHERE enabled=true";
+        String queryString = "SELECT id, FROM user WHERE enabled=true";
 
         Session session = entityManager.unwrap(Session.class).getSession();
         Query query = session.createSQLQuery(queryString);
