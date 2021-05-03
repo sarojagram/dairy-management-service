@@ -27,4 +27,8 @@ public class RoleService {
     public List<ApiDTO> findAllBasicInfo(){
         return roleRepository.findAllBasicInfo();
     }
+
+    public Role findByName(String name){
+        return roleRepository.findByName(name);
+    }
 }

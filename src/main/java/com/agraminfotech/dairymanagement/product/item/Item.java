@@ -4,8 +4,8 @@ import com.agraminfotech.dairymanagement.base.Model;
 import com.agraminfotech.dairymanagement.product.attribute.Attribute;
 import com.agraminfotech.dairymanagement.product.brand.Brand;
 import com.agraminfotech.dairymanagement.product.category.Category;
-import com.agraminfotech.dairymanagement.product.measurement.Measurement;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.agraminfotech.dairymanagement.product.ingredients.Ingredient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,19 +44,24 @@ public class Item extends Model {
     @Column(columnDefinition = "boolean default 0")
     private boolean deletedStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "measurement_id")
-    private Measurement measurement;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_category_id")
     private Category productCategory;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
+    @JsonIgnore
     @OneToMany(targetEntity = Attribute.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<Attribute> productAttributes = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(targetEntity = Attribute.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    private List<Ingredient> Ingredients = new ArrayList<>();
+
 }

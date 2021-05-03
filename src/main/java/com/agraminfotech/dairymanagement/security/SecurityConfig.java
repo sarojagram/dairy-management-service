@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().and().csrf().disable()
                 // don't authenticate this particular request.
                 .authorizeRequests().antMatchers("/login").permitAll()
+                .and().authorizeRequests().antMatchers("/root/user/save").permitAll()
                 .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
                 .antMatchers(HttpMethod.POST,"/admin/**").hasAuthority("ADMIN").
                 // all other requests need to be authenticated.

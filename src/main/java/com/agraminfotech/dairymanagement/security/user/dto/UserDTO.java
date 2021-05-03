@@ -1,6 +1,7 @@
 package com.agraminfotech.dairymanagement.security.user.dto;
 
 import com.agraminfotech.dairymanagement.base.ModelDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,9 @@ public class UserDTO extends ModelDTO {
 
     private Collection<Long> roleIds;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
+
+    boolean enabled;
 
 }

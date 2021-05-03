@@ -3,10 +3,13 @@ package com.agraminfotech.dairymanagement.security.user;
 import com.agraminfotech.dairymanagement.security.role.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,19 +17,21 @@ import java.util.Date;
 @Table(name = "user")
 @Getter
 @Setter
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -6754166471994505180L;
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String firstName;
 
     @Column
     private String MiddleName;
 
-    @Column(nullable = false)
+    @Column
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -42,13 +47,13 @@ public class User {
     @Column
     private String mobile;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column
@@ -72,7 +77,7 @@ public class User {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Date createdDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

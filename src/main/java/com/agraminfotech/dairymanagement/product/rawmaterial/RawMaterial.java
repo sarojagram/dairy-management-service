@@ -1,24 +1,20 @@
-package com.agraminfotech.dairymanagement.product.attribute;
+package com.agraminfotech.dairymanagement.product.rawmaterial;
 
 import com.agraminfotech.dairymanagement.base.Model;
-import com.agraminfotech.dairymanagement.product.measurement.Measurement;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "attribute")
+@Table(name = "raw_material")
 @Getter @Setter
-public class Attribute extends Model {
+public class RawMaterial extends Model {
 
     @Column(unique = true)
     private String name;
-
-    @Column
-    private String value;
 
     @Column(length = 500)
     private String remarks;

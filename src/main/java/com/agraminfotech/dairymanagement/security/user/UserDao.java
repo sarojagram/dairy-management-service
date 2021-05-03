@@ -10,5 +10,7 @@ public interface UserDao {
 
     List<UserDTO> findAllUserDetails();
 
-    UserDTO findUserDetail();
+    UserDTO findUserDetailById(Long id);
+
+    boolean isRootUserAlreadyPresent();
 }

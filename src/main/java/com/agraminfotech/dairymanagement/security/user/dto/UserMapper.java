@@ -1,10 +1,13 @@
 package com.agraminfotech.dairymanagement.security.user.dto;
 
 import com.agraminfotech.dairymanagement.security.user.User;
+import com.agraminfotech.dairymanagement.utils.dateutils.DateUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+
+import java.util.Date;
 
 @Mapper
 public interface UserMapper {

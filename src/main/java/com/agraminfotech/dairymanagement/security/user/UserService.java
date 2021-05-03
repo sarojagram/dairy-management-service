@@ -1,6 +1,8 @@
 package com.agraminfotech.dairymanagement.security.user;
 
+import com.agraminfotech.dairymanagement.base.ApiDTO;
 import com.agraminfotech.dairymanagement.security.role.Role;
+import com.agraminfotech.dairymanagement.security.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -51,6 +54,22 @@ public class UserService implements UserDetailsService {
 
     public boolean existsByEmail(String email){
         return  userRepository.existsByEmail(email);
+    }
+
+    public boolean isRootUserAlreadyPresent() {
+        return  userRepository.isRootUserAlreadyPresent();
+    }
+
+    public List<ApiDTO> findAllBasic(){
+        return userRepository.findAllBasic();
+    }
+
+    public List<UserDTO> findAllDetailInfo(){
+        return userRepository.findAllUserDetails();
+    }
+
+    public UserDTO findUserDetailById(Long id){
+        return userRepository.findUserDetailById(id);
     }
 
 }
