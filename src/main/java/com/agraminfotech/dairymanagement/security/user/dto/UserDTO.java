@@ -12,7 +12,8 @@ import java.util.Date;
 @Setter
 public class UserDTO extends ModelDTO {
 
-    private String firstName,middleName,lastName,phone,mobile,address,image,signature,username,password,email;
+    private String firstName,middleName,lastName,phone,mobile,address,image,
+            signature,username,password,oldPassword,email;
 
     private Collection<Long> roleIds;
 

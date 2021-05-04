@@ -205,12 +205,15 @@ public class UserController {
     }
 
     @PutMapping(value = "admin/user/enabledOrDisabled")
-    private ResponseEntity<Response> enabledOrDisabledUser(boolean status){
+    private ResponseEntity<Response> enabledOrDisabledUser(@RequestBody UserDTO userDTO){
         String message = "";
         int statusCode ;
         try{
-            User user = helper.getCurrentUser();
-            user.setEnabled(status);
+            User user = userService.findById(userDTO.getId().longValue());
+            User currentUser = helper.getCurrentUser();
+            user.setEnabled(userDTO.isEnabled());
+            user.setModifiedBy(currentUser);
+            user.setModifiedDate(DateUtils.getCurrentDate(true));
             userService.saveOrUpdate(user);
             message = Strings.UPDATE_SUCCESSFULLY;
             statusCode = 200;
@@ -228,8 +231,13 @@ public class UserController {
         String message = "";
         int statusCode ;
         try{
-            User user = helper.getCurrentUser();
+            User user = userService.findById(userDTO.getId().longValue());
+            User currentUser = helper.getCurrentUser();
+            if(bCryptPasswordEncoder.bCryptPasswordEncoder().matches(userDTO.getPassword(), user.getPassword()))
+                return Helper.getResponseEntity(null,"Nothing to update.Password is similar to old one.", 100);
             user.setPassword(bCryptPasswordEncoder.bCryptPasswordEncoder().encode(userDTO.getPassword()));
+            user.setModifiedBy(currentUser);
+            user.setModifiedDate(DateUtils.getCurrentDate(true));
             userService.saveOrUpdate(user);
             message = Strings.UPDATE_SUCCESSFULLY;
             statusCode = 200;
@@ -248,7 +256,9 @@ public class UserController {
         int statusCode ;
         try{
             User user = helper.getCurrentUser();
-            if(bCryptPasswordEncoder.bCryptPasswordEncoder().matches(userDTO.getPassword(),user.getPassword())){
+            if(bCryptPasswordEncoder.bCryptPasswordEncoder().matches(userDTO.getOldPassword(),user.getPassword())){
+                if(bCryptPasswordEncoder.bCryptPasswordEncoder().matches(userDTO.getPassword(), user.getPassword()))
+                    return Helper.getResponseEntity(null,"Nothing to update.Password is similar to old one.", 100);
                 user.setPassword(bCryptPasswordEncoder.bCryptPasswordEncoder().encode(userDTO.getPassword()));
                 userService.saveOrUpdate(user);
                 message = Strings.UPDATE_SUCCESSFULLY;
@@ -264,5 +274,125 @@ public class UserController {
         }
 
         return Helper.getResponseEntity(null,message,statusCode);
+    }
+
+    @PutMapping(value = "user/update")
+    private ResponseEntity<Response> updateByUserThemselves(@RequestBody UserDTO userDTO){
+        String message = "";
+        int statusCode ;
+        try{
+            User user = helper.getCurrentUser();
+            user.setFirstName(userDTO.getFirstName());
+            user.setMiddleName(userDTO.getMiddleName());
+            user.setLastName(userDTO.getLastName());
+            user.setAddress(userDTO.getAddress());
+            user.setPhone(userDTO.getPhone());
+            user.setMobile(userDTO.getMobile());
+            user.setBirthDate(userDTO.getBirthDate());
+            user.setModifiedBy(user);
+            user.setModifiedDate(DateUtils.getCurrentDate(true));
+            userService.saveOrUpdate(user);
+            message = Strings.UPDATE_SUCCESSFULLY;
+            statusCode = 200;
+        }catch(Exception e){
+            e.printStackTrace();
+            message = Strings.SOMETHING_WENT_WRONG;
+            statusCode = 500;
+        }
+
+        return Helper.getResponseEntity(null,message,statusCode);
+    }
+
+    @PutMapping(value = "admin/user/resetUsername")
+    private ResponseEntity<Response> resetUsernameByAdmin(@RequestBody UserDTO userDTO){
+        String message = "";
+        int statusCode ;
+        try{
+            if(userService.existsByUsername(userDTO.getUsername()))
+                return Helper.getResponseEntity(null,Strings.USERNAME_ALREADY_EXISTS,100);
+            User user = userService.findById(userDTO.getId().longValue());
+            if(user != null){
+                user.setUsername(userDTO.getUsername());
+                user.setModifiedDate(DateUtils.getCurrentDate(true));
+                user.setModifiedBy(helper.getCurrentUser());
+                userService.saveOrUpdate(user);
+                message = Strings.UPDATE_SUCCESSFULLY;
+                statusCode = 200;
+            }else{
+                message = Strings.INVALID_ID;
+                statusCode = 100;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            message = Strings.SOMETHING_WENT_WRONG;
+            statusCode = 500;
+        }
+
+        return Helper.getResponseEntity(null,message,statusCode);
+    }
+
+    @PutMapping(value = "user/resetEmail")
+    private ResponseEntity<Response> resetEmail(@RequestBody UserDTO userDTO){
+        String message = "";
+        int statusCode ;
+        try{
+            if(userService.existsByEmail(userDTO.getEmail()))
+                return Helper.getResponseEntity(null,Strings.EMAIL_ALREADY_EXISTS,100);
+            User user = userService.findById(userDTO.getId().longValue());
+            if(user != null){
+                user.setUsername(userDTO.getEmail());
+                user.setModifiedDate(DateUtils.getCurrentDate(true));
+                user.setModifiedBy(helper.getCurrentUser());
+                userService.saveOrUpdate(user);
+                message = Strings.UPDATE_SUCCESSFULLY;
+                statusCode = 200;
+            }else{
+                message = Strings.INVALID_ID;
+                statusCode = 100;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            message = Strings.SOMETHING_WENT_WRONG;
+            statusCode = 500;
+        }
+
+        return Helper.getResponseEntity(null,message,statusCode);
+    }
+
+    @PutMapping(value = "admin/user/update/roles")
+    private ResponseEntity<Response> update(@RequestBody UserDTO userDTO) {
+
+        String message = "";
+        int statusCode;
+        try{
+            User user = userService.findById(userDTO.getId().longValue());
+            if(user != null){
+                Collection<Long> roleIds = userDTO.getRoleIds();
+                Collection<Role> roles = new ArrayList<>();
+                if(roleIds.size() > 0){
+                    for (Long id: roleIds){
+                        Role role = roleService.findById(id);
+                        if(role != null){
+                            roles.add(role);
+                        }else return  Helper.getResponseEntity(null,"No such role found in our database.Please contact admin.",100);
+                    }
+                }else return  Helper.getResponseEntity(null,"Seems like no any role assign to this user.First assign role to perform action.", 100);
+                user.setRoles(roles);
+                user.setModifiedDate(DateUtils.getCurrentDate(true));
+                user.setModifiedBy(helper.getCurrentUser());
+                userService.saveOrUpdate(user);;
+                message = Strings.UPDATE_SUCCESSFULLY;
+                statusCode = 200;
+            }else {
+                message = Strings.INVALID_ID;
+                statusCode = 100;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            message = Strings.SOMETHING_WENT_WRONG;
+            statusCode = 500;
+        }
+
+        return Helper.getResponseEntity(userDTO,message,statusCode);
     }
 }
