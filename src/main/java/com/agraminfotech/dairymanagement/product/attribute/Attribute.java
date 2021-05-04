@@ -8,11 +8,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "attribute")
 @Getter @Setter
-public class Attribute extends Model {
+public class Attribute extends Model implements Serializable {
 
     @Column(unique = true)
     private String name;
