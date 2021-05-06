@@ -50,6 +50,6 @@ public class PurchaseInfo extends Model {
     private User approvedBy;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "purchaseInfo", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "purchaseInfo", fetch = FetchType.LAZY)
     private List<PurchaseItem> purchaseItems;
 }

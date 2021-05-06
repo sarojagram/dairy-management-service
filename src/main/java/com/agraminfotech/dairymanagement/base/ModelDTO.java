@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -13,5 +14,5 @@ public class ModelDTO {
 
     private String name,createdBy,modifiedBy;
 
-    private String createdDate, modifiedDate;
+    private Date createdDate, modifiedDate;
 }

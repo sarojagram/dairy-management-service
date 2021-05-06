@@ -31,7 +31,7 @@ public class PurchaseItem {
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "raw_material-id")
+    @JoinColumn(name = "raw_material_id")
     private RawMaterial rawMaterial;
 
     @JsonIgnore
@@ -40,7 +40,7 @@ public class PurchaseItem {
     private Measurement measurement;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_info_id")
     private PurchaseInfo purchaseInfo;
 }

@@ -33,8 +33,10 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public List<UserDTO> findAllUserDetails() {
-        String queryString = "SELECT id,first_name AS firstName,last_name AS lastName,middle_name AS middleName," +
-                             "address,phone,email,username,mobile,enabled,birth_date As birthDate FROM user";
+        String queryString = "SELECT u.id,u.first_name AS firstName,u.last_name AS lastName,u.middle_name AS middleName," +
+                             "u.address,u.phone,u.email,u.username,u.mobile,u.enabled,u.birth_date AS birthDate,u.image,u.signature," +
+                             "(SELECT c.username FROM user AS c WHERE c.id=u.created_by_id) AS createdBy,u.created_date AS createdDate," +
+                             "(SELECT m.username FROM user AS m WHERE m.id=u.modified_by_id) AS modifiedBy,u.modified_date AS modifiedDate FROM user AS u";
 
         Session session = entityManager.unwrap(Session.class).getSession();
         Query query = session.createSQLQuery(queryString);

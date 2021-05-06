@@ -68,4 +68,6 @@ public class Strings {
     public static final String USERNAME_ALREADY_EXISTS = "username already exists in our database.Enter unique one.";
 
     public static final String EMAIL_ALREADY_EXISTS = "email already exists in our database.Enter unique one.";
+
+    public static  final String[] ACCOUNT_TYPE = {"both","vendor","customer"};
 }

@@ -2,14 +2,12 @@ package com.agraminfotech.dairymanagement.security.user.dto;
 
 import com.agraminfotech.dairymanagement.security.user.User;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-05-04T11:49:53+0545",
+    date = "2021-05-05T17:36:10+0545",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_261 (Oracle Corporation)"
 )
 @Component
@@ -28,12 +26,8 @@ public class UserMapperImpl implements UserMapper {
         if ( user.getId() != null ) {
             userDTO.setId( BigInteger.valueOf( user.getId() ) );
         }
-        if ( user.getCreatedDate() != null ) {
-            userDTO.setCreatedDate( new SimpleDateFormat().format( user.getCreatedDate() ) );
-        }
-        if ( user.getModifiedDate() != null ) {
-            userDTO.setModifiedDate( new SimpleDateFormat().format( user.getModifiedDate() ) );
-        }
+        userDTO.setCreatedDate( user.getCreatedDate() );
+        userDTO.setModifiedDate( user.getModifiedDate() );
         userDTO.setFirstName( user.getFirstName() );
         userDTO.setMiddleName( user.getMiddleName() );
         userDTO.setLastName( user.getLastName() );
@@ -77,22 +71,8 @@ public class UserMapperImpl implements UserMapper {
         user.setImage( userDTO.getImage() );
         user.setSignature( userDTO.getSignature() );
         user.setEnabled( userDTO.isEnabled() );
-        try {
-            if ( userDTO.getCreatedDate() != null ) {
-                user.setCreatedDate( new SimpleDateFormat().parse( userDTO.getCreatedDate() ) );
-            }
-        }
-        catch ( ParseException e ) {
-            throw new RuntimeException( e );
-        }
-        try {
-            if ( userDTO.getModifiedDate() != null ) {
-                user.setModifiedDate( new SimpleDateFormat().parse( userDTO.getModifiedDate() ) );
-            }
-        }
-        catch ( ParseException e ) {
-            throw new RuntimeException( e );
-        }
+        user.setCreatedDate( userDTO.getCreatedDate() );
+        user.setModifiedDate( userDTO.getModifiedDate() );
 
         return user;
     }
